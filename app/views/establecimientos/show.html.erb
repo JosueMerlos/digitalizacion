@@ -1,0 +1,90 @@
+<h1 class="text-center"><%= @establecimiento.nombre %></h1>
+
+<div class="row">
+	<div class="col-sm-6">
+		<h2>Subir Fotos</h2>
+
+		<%= form_for @foto, url: establecimientos_guardar_foto_path, html: { multipart: true } do |f| %>
+			<%= f.hidden_field :establecimiento_id %>
+			<%= f.file_field :foto %>
+			<br>
+			<%= f.submit 'Guardar', class: 'btn btn-primary' %>
+		<% end %>
+		
+	</div>
+	<div class="col-sm-6">
+		<h2>Subir Documentos</h2>
+
+		<%= form_for @documento, url: establecimientos_guardar_documento_path, html: { multipart: true } do |f| %>
+			<%= f.hidden_field :establecimiento_id %>
+			<%= f.file_field :archivo %>
+			<br>
+			<%= f.submit 'Guardar', class: 'btn btn-primary' %>
+		<% end %>
+	</div>
+</div>
+
+<h3>Lista Fotos</h3>
+
+<table class="table">
+	<thead>
+		<th>Vista Previa</th>
+		<th>FileName</th>
+		<th>ContentType</th>
+		<th>FileSize</th>
+		<th colspan="4">Acciones</th>
+	</thead>
+	<tbody>
+		<% @establecimiento.fotos.each do |foto| %>
+			<tr>
+				<td><%= image_tag foto.foto.url(:thumb) %></td>
+				<td><%= foto.foto_file_name %></td>
+				<td><%= foto.foto_content_type %></td>
+				<td><%= foto.foto_file_size %></td>
+				<td><%= link_to 'Ver pequeña', foto.foto.url(:thumb), { target: '_blank' } %></td>
+				<td><%= link_to 'Ver mediana', foto.foto.url(:medium), { target: '_blank' } %></td>
+				<td><%= link_to 'Ver original', foto.foto.url(:original), { target: '_blank' } %></td>
+				<td>
+					<%= form_for @foto, url: establecimientos_borrar_foto_path, method: :delete do %>
+						<%= hidden_field_tag :id, foto.id %>
+						<%= submit_tag 'Eliminar', class: 'btn btn-sm btn-primary', data: { confirm: 'Esta seguro?' } %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>		
+	</tbody>
+</table>
+
+<h3>Lista Documentos</h3>
+<table class="table">
+	<thead>
+		<th>FileName</th>
+		<th>ContentType</th>
+		<th>FileSize</th>
+		<th>Acciones</th>
+	</thead>
+	<tbody>
+		<% @establecimiento.documentos.each do |documento| %>
+			<tr>
+				<td><%= documento.archivo_file_name %></td>
+				<td><%= documento.archivo_content_type %></td>
+				<td><%= documento.archivo_file_size %></td>
+				<td>
+					<%= form_for @documento, url: establecimientos_descargar_documento_path, method: :post do %>
+						<%= hidden_field_tag :id, documento.id %>
+						<%= submit_tag 'Descargar', class: 'btn btn-sm btn-primary' %>
+					<% end %>
+				</td>
+				<td>
+					<%= form_for @documento, url: establecimientos_borrar_documento_path, method: :delete do %>
+						<%= hidden_field_tag :id, documento.id %>
+						<%= submit_tag 'Eliminar', class: 'btn btn-sm btn-primary', data: { confirm: 'Esta seguro?' } %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>		
+	</tbody>
+</table>
+
+<%= link_to 'Editar', edit_establecimiento_path(@establecimiento) %> |
+<%= link_to 'Atras', establecimientos_path %>
