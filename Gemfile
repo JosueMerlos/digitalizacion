@@ -13,7 +13,7 @@ gem "strip_attributes"
 gem 'bootstrap-sass'
 gem 'paper_trail'
 gem 'devise'
-gem "paperclip", "~> 5.0.0"
+gem "paperclip", "~> 5.2.0"
 
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
